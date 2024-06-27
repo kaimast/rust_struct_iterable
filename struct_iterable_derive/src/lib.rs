@@ -36,7 +36,7 @@ use syn::{Meta, parse_macro_input, Data, DeriveInput, Fields};
 /// };
 ///
 /// for (field_name, field_value) in my_instance.iter() {
-///     println!("{}: {:?}", field_name, field_value);
+///     println!("{field_name}: {field_value:?}");
 /// }
 /// ```
 #[proc_macro_derive(Iterable, attributes(iterable))]
@@ -53,7 +53,9 @@ pub fn derive_iterable(input: TokenStream) -> TokenStream {
                 panic!("Invalid format of \"iterable\" attribute");
             }
         },
-        None => quote!(std::any::Any),
+        None => {
+            quote!(std::any::Any)
+        },
     };
 
     let struct_name = input.ident;
@@ -73,7 +75,7 @@ pub fn derive_iterable(input: TokenStream) -> TokenStream {
         }
     });
 
-    let expanded = quote! {
+    TokenStream::from(quote! {
         impl<'a> Iterable for &'a #struct_name {
             type Item = &'a dyn #trait_name;
 
@@ -83,7 +85,5 @@ pub fn derive_iterable(input: TokenStream) -> TokenStream {
                 ].into_iter()
             }
         }
-    };
-
-    TokenStream::from(expanded)
+    })
 }

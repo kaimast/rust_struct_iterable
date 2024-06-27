@@ -32,5 +32,9 @@ path = "src/lib.rs"
 name = "custom-trait"
 path = "examples/custom_trait.rs"
 
+[[example]]
+name = "any"
+path = "examples/any.rs"
+
 [package.metadata.docs.rs]
 all-features = true

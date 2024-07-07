@@ -76,7 +76,7 @@ pub fn derive_iterable(input: TokenStream) -> TokenStream {
     });
 
     TokenStream::from(quote! {
-        impl<'a> Iterable for &'a #struct_name {
+        impl<'a> struct_iterable::Iterable for &'a #struct_name {
             type Item = &'a dyn #trait_name;
 
             fn iter(self) -> std::vec::IntoIter<(&'static str, Self::Item)> {
